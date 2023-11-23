@@ -23,6 +23,4 @@ const userSchema = new Schema<TUser>({
   address: { type: addressSchema, required: true },
 });
 
-//export const Student = model<TStudent, StudentModel>('Student', studentSchema);
-
-export const User = model<TUser>('User', userSchema);
+export const UserModel = model<TUser>('User', userSchema);
