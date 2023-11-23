@@ -1,5 +1,7 @@
 // import { Schema, model, connect } from 'mongoose';
 
+import { Model } from 'mongoose';
+
 export type TAddress = {
   street: string;
   city: string;
@@ -21,3 +23,9 @@ export type TUser = {
   hobbies: [string];
   address: TAddress;
 };
+
+export type UserMethod = {
+  isAlreadyExists(userId: string): Promise<TUser | null>;
+};
+
+export type UserModel = Model<TUser, Record<string, never>, UserMethod>;
