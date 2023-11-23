@@ -15,7 +15,7 @@ import { TUser } from './user.interface';
 const createUserInDB = async (user: TUser) => {
   const result = await UserModel.create(user);
 
-  await UserModel.findByIdAndUpdate(result._id, { $unset: ['password'] });
+  //   await UserModel.findByIdAndUpdate(result._id, { $unset: ['password'] });
 
   const passwordFielfRemove = await UserModel.findById(result._id).select(
     '-password',
@@ -28,8 +28,10 @@ const getAllUserFromDB = async () => {
   const result = await UserModel.find();
   const removingPasswordField = await Promise.all(
     result.map(async (users) => {
-      await UserModel.findByIdAndUpdate(users._id, { $unset: ['password'] });
-      return UserModel.findById(users._id).select('-password');
+      //   await UserModel.findByIdAndUpdate(users._id, { $unset: ['password'] });
+      return await UserModel.findById(users._id).select(
+        ' username fullName age email address',
+      );
     }),
   );
 
@@ -40,7 +42,7 @@ const getAUserFromDB = async (userId: string) => {
   const result = await UserModel.findOne({ userId });
 
   if (result) {
-    await UserModel.findByIdAndUpdate(result._id, { $unset: ['password'] });
+    // await UserModel.findByIdAndUpdate(result._id, { $unset: ['password'] });
 
     const passwordFielfRemove = await UserModel.findById(result._id).select(
       '-password',
