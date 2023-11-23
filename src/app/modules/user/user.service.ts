@@ -24,6 +24,11 @@ const createUserInDB = async (user: TUser) => {
   return passwordFielfRemove;
 };
 
+const getAllUserFromDB = async () => {
+  const result = await UserModel.find();
+  return result;
+};
 export const UserServices = {
   createUserInDB,
+  getAllUserFromDB,
 };
