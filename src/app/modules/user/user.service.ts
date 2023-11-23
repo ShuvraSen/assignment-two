@@ -28,7 +28,16 @@ const getAllUserFromDB = async () => {
   const result = await UserModel.find();
   return result;
 };
+
+const getAUserFromDB = async (userId: string) => {
+  const result = await UserModel.findOne({ userId });
+  return result;
+
+  //PUT /api/users/:userId
+};
+
 export const UserServices = {
   createUserInDB,
   getAllUserFromDB,
+  getAUserFromDB,
 };
