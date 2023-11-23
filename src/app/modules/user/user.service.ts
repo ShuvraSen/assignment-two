@@ -26,12 +26,30 @@ const createUserInDB = async (user: TUser) => {
 
 const getAllUserFromDB = async () => {
   const result = await UserModel.find();
-  return result;
+  const removingPasswordField = await Promise.all(
+    result.map(async (users) => {
+      await UserModel.findByIdAndUpdate(users._id, { $unset: ['password'] });
+      return UserModel.findById(users._id).select('-password');
+    }),
+  );
+
+  return removingPasswordField;
 };
 
 const getAUserFromDB = async (userId: string) => {
   const result = await UserModel.findOne({ userId });
-  return result;
+
+  if (result) {
+    await UserModel.findByIdAndUpdate(result._id, { $unset: ['password'] });
+
+    const passwordFielfRemove = await UserModel.findById(result._id).select(
+      '-password',
+    );
+
+    return passwordFielfRemove;
+  } else {
+    return null;
+  }
 
   //PUT /api/users/:userId
 };
