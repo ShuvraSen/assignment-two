@@ -20,19 +20,27 @@ const addressSchema = new Schema<TAddress>({
   country: { type: String, required: true },
 });
 
-const userSchema = new Schema<TUser, UserModel, UserMethod>({
-  userId: { type: String, required: true, unique: true },
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true, unique: true },
-  fullName: { type: nameSchema, required: true },
-  age: { type: Number, required: true },
-  email: { type: String, required: true, unique: true },
-  isActive: ['active', 'inactive'],
-  hobbies: { type: [String] },
-  address: { type: addressSchema, required: true },
-  isDeleted: { type: Boolean, default: false },
-});
+const userSchema = new Schema<TUser, UserModel, UserMethod>(
+  {
+    userId: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true, unique: true },
+    fullName: { type: nameSchema, required: true },
+    age: { type: Number, required: true },
+    email: { type: String, required: true, unique: true },
+    isActive: ['active', 'inactive'],
+    hobbies: { type: [String] },
+    address: { type: addressSchema, required: true },
+    isDeleted: { type: Boolean, default: false },
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
+);
+// virtual
 
+// pre middlewares
 userSchema.pre('save', async function (next) {
   const user = this;
   user.password = await bcrypt.hash(
