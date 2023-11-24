@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
 import {
   TAddress,
@@ -6,6 +7,8 @@ import {
   UserMethod,
   UserModel,
 } from './user/user.interface';
+import bcrypt from 'bcrypt';
+import config from '../config';
 
 const nameSchema = new Schema<TFullName>({
   firstName: { type: String, required: true },
@@ -29,6 +32,14 @@ const userSchema = new Schema<TUser, UserModel, UserMethod>({
   address: { type: addressSchema, required: true },
 });
 
+userSchema.pre('save', async function (next) {
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  next();
+});
 userSchema.methods.isAlreadyExists = async function (userId: string) {
   const existingUser = await User.findOne({ userId });
   return existingUser;

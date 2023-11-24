@@ -22,6 +22,7 @@ const createUserInDB = async (user: TUser) => {
   );
 
   return passwordFielfRemove;
+  //   return result;
 };
 
 const getAllUserFromDB = async () => {
