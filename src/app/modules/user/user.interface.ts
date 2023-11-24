@@ -23,6 +23,7 @@ export type TUser = {
   isActive: 'active' | 'inactive';
   hobbies: [string];
   address: TAddress;
+  isDeleted: boolean;
 };
 
 export type UserMethod = {

@@ -92,9 +92,15 @@ const updateAUserInDB = async (userId: string, $set: TUser) => {
   return result;
 };
 
+const deletedAUserInDB = async (userId: string) => {
+  const result = await User.updateOne({ userId }, { isDeleted: true });
+  return result;
+};
+
 export const UserServices = {
   createUserInDB,
   getAllUserFromDB,
   getAUserFromDB,
   updateAUserInDB,
+  deletedAUserInDB,
 };

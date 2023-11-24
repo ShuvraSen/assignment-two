@@ -30,6 +30,7 @@ const userSchema = new Schema<TUser, UserModel, UserMethod>({
   isActive: ['active', 'inactive'],
   hobbies: { type: [String] },
   address: { type: addressSchema, required: true },
+  isDeleted: { type: Boolean, default: false },
 });
 
 userSchema.pre('save', async function (next) {
@@ -38,6 +39,15 @@ userSchema.pre('save', async function (next) {
     user.password,
     Number(config.bcrypt_salt_rounds),
   );
+  next();
+});
+
+userSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+userSchema.pre('find', function (next) {
+  this.findOne({ isDeleted: { $ne: true } });
   next();
 });
 userSchema.methods.isAlreadyExists = async function (userId: string) {
